@@ -217,16 +217,22 @@ export const deleteNews = async (id) => {
 export const getAwards = async () => {
   const { data, error } = await supabase.from('awards').select('*').maybeSingle();
   if (error) throw error;
-  if (!data) return { playerOfMonth: [], playerOfSeason: null };
+  if (!data) return { playerOfMonth: [], playerOfSeason: null, goldenBoot: null, playmakerAward: null, goldenGloves: null };
   return {
     playerOfMonth: data.player_of_month || [],
     playerOfSeason: data.player_of_season || null,
+    goldenBoot: data.top_scorer_trophy || null,
+    playmakerAward: data.playmaker_award || null,
+    goldenGloves: data.best_goalkeeper_trophy || null,
   };
 };
 export const updateAwards = async (updates) => {
   const payload = { id: 1 };
   if (updates.playerOfMonth !== undefined) payload.player_of_month = updates.playerOfMonth;
   if (updates.playerOfSeason !== undefined) payload.player_of_season = updates.playerOfSeason;
+  if (updates.goldenBoot !== undefined) payload.top_scorer_trophy = updates.goldenBoot;
+  if (updates.playmakerAward !== undefined) payload.playmaker_award = updates.playmakerAward;
+  if (updates.goldenGloves !== undefined) payload.best_goalkeeper_trophy = updates.goldenGloves;
   const { error } = await supabase.from('awards').upsert(payload);
   if (error) throw error;
   return getAwards();

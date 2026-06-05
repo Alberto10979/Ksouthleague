@@ -160,7 +160,20 @@ input, select, textarea, button { font-family: inherit; }
 .footer-info h4 { color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
 .footer-info p { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 0.25rem; }
 .footer-bottom { border-top: 1px solid var(--border); padding: 1rem 0; text-align: center; }
+.footer-bottom-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
 .footer-bottom p { color: var(--text-muted); font-size: 0.78rem; }
+.footer-bottom-ig { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: #c13584; transition: opacity 0.2s; }
+.footer-bottom-ig:hover { opacity: 0.8; }
+.footer-social { margin-top: 0.75rem; }
+.instagram-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #fff; padding: 0.45rem 1rem; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 600; transition: opacity 0.2s;
+}
+.instagram-btn:hover { opacity: 0.85; }
+.footer-ig-link { display: flex; align-items: center; gap: 0.3rem; color: #c13584; font-size: 0.82rem; margin-top: 0.4rem; transition: opacity 0.2s; }
+.footer-ig-link:hover { opacity: 0.8; }
 @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
 @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
 
@@ -615,6 +628,46 @@ input, select, textarea, button { font-family: inherit; }
 .rank-bronze { background: rgba(180,83,9,0.2); color: #b45309; }
 .highlight-stat { color: var(--accent); font-size: 1.05rem; }
 .stat-team-cell { display: flex; align-items: center; gap: 0.5rem; }
+
+/* Season Trophies */
+.season-trophies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
+@media (max-width: 640px) { .season-trophies { grid-template-columns: 1fr; } }
+
+.trophy-card {
+  border-radius: var(--radius); padding: 2rem 1.5rem;
+  text-align: center; border: 2px solid; transition: transform 0.2s, box-shadow 0.2s;
+}
+.trophy-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.trophy-gold { background: linear-gradient(135deg, #1a1400, #2a2000); border-color: #f59e0b; }
+.trophy-silver { background: linear-gradient(135deg, #0f1a0f, #1a2a1a); border-color: #4ade80; }
+.trophy-bronze { background: linear-gradient(135deg, #001020, #001830); border-color: #60a5fa; }
+
+.trophy-icon { font-size: 3rem; margin-bottom: 0.75rem; line-height: 1; }
+.trophy-title { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
+.trophy-gold .trophy-title { color: #f59e0b; }
+.trophy-silver .trophy-title { color: #4ade80; }
+.trophy-bronze .trophy-title { color: #60a5fa; }
+.trophy-subtitle { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+.trophy-winner { display: block; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+.trophy-winner:hover { color: var(--accent); }
+.trophy-team { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem; }
+.trophy-stat { font-size: 0.78rem; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 0.2rem 0.6rem; border-radius: 20px; display: inline-block; }
+.trophy-pending { font-size: 0.82rem; color: var(--text-muted); font-style: italic; }
+
+/* Current Leaders */
+.awards-leaders { margin-top: 2rem; }
+.awards-leaders h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+.leaders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.leader-hint {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.85rem 1rem;
+}
+.leader-hint-icon { font-size: 1.75rem; line-height: 1; flex-shrink: 0; }
+.leader-hint-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.15rem; }
+.leader-hint-name { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text); transition: color 0.2s; }
+.leader-hint-name:hover { color: var(--primary-light); }
+.leader-hint-value { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
 
 .awards-section { margin-top: 2rem; }
 .awards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }

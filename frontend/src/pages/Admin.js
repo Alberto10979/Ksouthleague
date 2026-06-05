@@ -379,6 +379,56 @@ export default function Admin() {
             <div>
               <h2>Awards & Honours</h2>
               <div className="awards-admin-grid">
+
+                {/* Golden Boot */}
+                <div className="awards-admin-card">
+                  <h3>👟 Golden Boot</h3>
+                  <p className="text-muted" style={{ fontSize: '0.78rem', marginBottom: '0.75rem' }}>Top scorer of the season</p>
+                  {awards.goldenBoot ? (
+                    <div className="award-admin-item">
+                      <strong>{awards.goldenBoot.playerName}</strong> — {getTeamById(awards.goldenBoot.teamId)?.name}
+                      {awards.goldenBoot.value && <p className="text-muted">{awards.goldenBoot.value} goals</p>}
+                    </div>
+                  ) : <p className="text-muted">Not yet awarded</p>}
+                  <button className="btn btn-outline btn-sm" style={{ marginTop: '0.75rem' }}
+                    onClick={() => openModal('trophy', { type: 'goldenBoot', icon: '👟', title: 'Golden Boot', valueLabel: 'goals' })}>
+                    {awards.goldenBoot ? 'Update' : '+ Award'}
+                  </button>
+                </div>
+
+                {/* Playmaker Award */}
+                <div className="awards-admin-card">
+                  <h3>🎯 Playmaker Award</h3>
+                  <p className="text-muted" style={{ fontSize: '0.78rem', marginBottom: '0.75rem' }}>Most assists of the season</p>
+                  {awards.playmakerAward ? (
+                    <div className="award-admin-item">
+                      <strong>{awards.playmakerAward.playerName}</strong> — {getTeamById(awards.playmakerAward.teamId)?.name}
+                      {awards.playmakerAward.value && <p className="text-muted">{awards.playmakerAward.value} assists</p>}
+                    </div>
+                  ) : <p className="text-muted">Not yet awarded</p>}
+                  <button className="btn btn-outline btn-sm" style={{ marginTop: '0.75rem' }}
+                    onClick={() => openModal('trophy', { type: 'playmakerAward', icon: '🎯', title: 'Playmaker Award', valueLabel: 'assists' })}>
+                    {awards.playmakerAward ? 'Update' : '+ Award'}
+                  </button>
+                </div>
+
+                {/* Golden Gloves */}
+                <div className="awards-admin-card">
+                  <h3>🧤 Golden Gloves</h3>
+                  <p className="text-muted" style={{ fontSize: '0.78rem', marginBottom: '0.75rem' }}>Goalkeeper with most clean sheets</p>
+                  {awards.goldenGloves ? (
+                    <div className="award-admin-item">
+                      <strong>{awards.goldenGloves.playerName}</strong> — {getTeamById(awards.goldenGloves.teamId)?.name}
+                      {awards.goldenGloves.value && <p className="text-muted">{awards.goldenGloves.value} clean sheets</p>}
+                    </div>
+                  ) : <p className="text-muted">Not yet awarded</p>}
+                  <button className="btn btn-outline btn-sm" style={{ marginTop: '0.75rem' }}
+                    onClick={() => openModal('trophy', { type: 'goldenGloves', icon: '🧤', title: 'Golden Gloves', valueLabel: 'clean sheets', positionFilter: 'GK' })}>
+                    {awards.goldenGloves ? 'Update' : '+ Award'}
+                  </button>
+                </div>
+
+                {/* Player of the Month */}
                 <div className="awards-admin-card">
                   <h3>🏅 Player of the Month</h3>
                   {awards.playerOfMonth?.map((a, i) => (
@@ -389,9 +439,10 @@ export default function Admin() {
                   ))}
                   <button className="btn btn-outline btn-sm" style={{ marginTop: '0.75rem' }}
                     onClick={() => openModal('award', { month: '', playerId: '', playerName: '', teamId: '', reason: '' })}>
-                    + Add Award
+                    + Add Month
                   </button>
                 </div>
+
               </div>
             </div>
           )}
@@ -661,6 +712,55 @@ export default function Admin() {
             <div className="modal-actions">
               <button className="btn btn-outline" onClick={closeModal}>Cancel</button>
               <button className="btn btn-primary" disabled={saving} onClick={saveNewsItem}>{saving ? 'Publishing...' : 'Publish Article'}</button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {modal?.type === 'trophy' && (
+        <Modal title={`Award ${formData.title}`} onClose={closeModal}>
+          <div className="modal-form">
+            <div className="form-group">
+              <label>Select Player {formData.positionFilter ? `(${formData.positionFilter} only)` : ''}</label>
+              <select className="form-input" value={formData.playerId || ''} onChange={e => handleField('playerId', e.target.value)}>
+                <option value="">Select player...</option>
+                {players
+                  .filter(p => !formData.positionFilter || p.position === formData.positionFilter)
+                  .map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({getTeamById(p.teamId)?.shortName})
+                      {formData.valueLabel === 'goals' ? ` — ${p.goals} goals` : ''}
+                      {formData.valueLabel === 'assists' ? ` — ${p.assists} assists` : ''}
+                      {formData.valueLabel === 'clean sheets' ? ` — ${p.cleanSheets} clean sheets` : ''}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Season</label>
+              <input className="form-input" value={formData.season || leagueInfo?.season || ''} onChange={e => handleField('season', e.target.value)} />
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-outline" onClick={closeModal}>Cancel</button>
+              <button className="btn btn-primary" disabled={saving} onClick={async () => {
+                const selected = players.find(p => p.id === Number(formData.playerId));
+                if (!selected) return alert('Please select a player.');
+                setSaving(true);
+                try {
+                  const statValue = formData.valueLabel === 'goals' ? selected.goals
+                    : formData.valueLabel === 'assists' ? selected.assists
+                    : selected.cleanSheets;
+                  const payload = {
+                    playerId: selected.id, playerName: selected.name,
+                    teamId: selected.teamId, season: formData.season || leagueInfo?.season,
+                    value: statValue, valueLabel: formData.valueLabel,
+                  };
+                  await updateAwards({ [formData.type]: payload });
+                  notify(`${formData.title} awarded to ${selected.name}!`);
+                  closeModal();
+                } catch (err) { alert('Error: ' + err.message); }
+                finally { setSaving(false); }
+              }}>{saving ? 'Saving...' : `Award ${formData.title}`}</button>
             </div>
           </div>
         </Modal>

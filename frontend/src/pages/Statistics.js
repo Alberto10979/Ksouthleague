@@ -29,6 +29,7 @@ export default function Statistics() {
     { id: 'clean', label: '🧤 Clean Sheets' },
     { id: 'discipline', label: '🟨 Discipline' },
     { id: 'motm', label: '⭐ MOTM' },
+    { id: 'awards', label: '🏆 Awards' },
   ];
 
   return (
@@ -292,6 +293,140 @@ export default function Statistics() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Awards */}
+        {tab === 'awards' && (
+          <div className="stats-section">
+            <h2>Season Awards — {leagueInfo?.season}</h2>
+
+            {/* Three main trophies */}
+            <div className="season-trophies">
+              {/* Golden Boot */}
+              <div className="trophy-card trophy-gold">
+                <div className="trophy-icon">👟</div>
+                <div className="trophy-title">Golden Boot</div>
+                <div className="trophy-subtitle">Top Scorer</div>
+                {awards.goldenBoot ? (
+                  <>
+                    <Link to={`/players/${awards.goldenBoot.playerId}`} className="trophy-winner">
+                      {awards.goldenBoot.playerName}
+                    </Link>
+                    <div className="trophy-team" style={{ color: getTeamById(awards.goldenBoot.teamId)?.primaryColor }}>
+                      {getTeamById(awards.goldenBoot.teamId)?.name}
+                    </div>
+                    {awards.goldenBoot.value && (
+                      <div className="trophy-stat">{awards.goldenBoot.value} goals</div>
+                    )}
+                  </>
+                ) : (
+                  <div className="trophy-pending">To be awarded</div>
+                )}
+              </div>
+
+              {/* Playmaker Award */}
+              <div className="trophy-card trophy-silver">
+                <div className="trophy-icon">🎯</div>
+                <div className="trophy-title">Playmaker Award</div>
+                <div className="trophy-subtitle">Most Assists</div>
+                {awards.playmakerAward ? (
+                  <>
+                    <Link to={`/players/${awards.playmakerAward.playerId}`} className="trophy-winner">
+                      {awards.playmakerAward.playerName}
+                    </Link>
+                    <div className="trophy-team" style={{ color: getTeamById(awards.playmakerAward.teamId)?.primaryColor }}>
+                      {getTeamById(awards.playmakerAward.teamId)?.name}
+                    </div>
+                    {awards.playmakerAward.value && (
+                      <div className="trophy-stat">{awards.playmakerAward.value} assists</div>
+                    )}
+                  </>
+                ) : (
+                  <div className="trophy-pending">To be awarded</div>
+                )}
+              </div>
+
+              {/* Golden Gloves */}
+              <div className="trophy-card trophy-bronze">
+                <div className="trophy-icon">🧤</div>
+                <div className="trophy-title">Golden Gloves</div>
+                <div className="trophy-subtitle">Most Clean Sheets</div>
+                {awards.goldenGloves ? (
+                  <>
+                    <Link to={`/players/${awards.goldenGloves.playerId}`} className="trophy-winner">
+                      {awards.goldenGloves.playerName}
+                    </Link>
+                    <div className="trophy-team" style={{ color: getTeamById(awards.goldenGloves.teamId)?.primaryColor }}>
+                      {getTeamById(awards.goldenGloves.teamId)?.name}
+                    </div>
+                    {awards.goldenGloves.value && (
+                      <div className="trophy-stat">{awards.goldenGloves.value} clean sheets</div>
+                    )}
+                  </>
+                ) : (
+                  <div className="trophy-pending">To be awarded</div>
+                )}
+              </div>
+            </div>
+
+            {/* Player of the Month */}
+            {awards.playerOfMonth?.length > 0 && (
+              <div className="awards-section">
+                <h3>🏅 Player of the Month</h3>
+                <div className="awards-grid">
+                  {awards.playerOfMonth.map((award, i) => {
+                    const team = getTeamById(award.teamId);
+                    return (
+                      <div key={i} className="award-card">
+                        <div className="award-medal">🏅</div>
+                        <div className="award-month">{award.month}</div>
+                        <Link to={`/players/${award.playerId}`} className="award-player">{award.playerName}</Link>
+                        <div className="award-team" style={{ color: team?.primaryColor }}>{team?.name}</div>
+                        <p className="award-reason">{award.reason}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Current leaders hint */}
+            <div className="awards-leaders">
+              <h3>Current Leaders</h3>
+              <div className="leaders-grid">
+                {getTopScorers()[0] && (
+                  <div className="leader-hint">
+                    <span className="leader-hint-icon">👟</span>
+                    <div>
+                      <div className="leader-hint-label">Top Scorer</div>
+                      <Link to={`/players/${getTopScorers()[0].id}`} className="leader-hint-name">{getTopScorers()[0].name}</Link>
+                      <span className="leader-hint-value">{getTopScorers()[0].goals} goals</span>
+                    </div>
+                  </div>
+                )}
+                {getTopAssists()[0] && (
+                  <div className="leader-hint">
+                    <span className="leader-hint-icon">🎯</span>
+                    <div>
+                      <div className="leader-hint-label">Top Assists</div>
+                      <Link to={`/players/${getTopAssists()[0].id}`} className="leader-hint-name">{getTopAssists()[0].name}</Link>
+                      <span className="leader-hint-value">{getTopAssists()[0].assists} assists</span>
+                    </div>
+                  </div>
+                )}
+                {getCleanSheets()[0] && (
+                  <div className="leader-hint">
+                    <span className="leader-hint-icon">🧤</span>
+                    <div>
+                      <div className="leader-hint-label">Most Clean Sheets</div>
+                      <Link to={`/players/${getCleanSheets()[0].id}`} className="leader-hint-name">{getCleanSheets()[0].name}</Link>
+                      <span className="leader-hint-value">{getCleanSheets()[0].cleanSheets} clean sheets</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
