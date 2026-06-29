@@ -658,8 +658,19 @@ export default function Admin() {
               </div>
             </div>
             <div className="form-group">
-              <label>Man of the Match (name)</label>
-              <input className="form-input" value={formData.motm?.playerName || ''} onChange={e => handleField('motm', { playerName: e.target.value })} placeholder="Player name" />
+              <label>Man of the Match</label>
+              <select
+                className="form-input"
+                value={formData.motm?.playerId || ''}
+                onChange={e => {
+                  if (!e.target.value) { handleField('motm', null); return; }
+                  const p = players.find(pl => pl.id === Number(e.target.value));
+                  if (p) handleField('motm', { playerId: p.id, playerName: p.name, teamId: p.teamId });
+                }}
+              >
+                <option value="">— None —</option>
+                {players.map(p => <option key={p.id} value={p.id}>{p.name} ({getTeamById(p.teamId)?.shortName})</option>)}
+              </select>
             </div>
             <div className="modal-actions">
               <button className="btn btn-outline" onClick={closeModal}>Cancel</button>

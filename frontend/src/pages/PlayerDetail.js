@@ -20,7 +20,9 @@ export default function PlayerDetail() {
 
   const playerGoals = results.flatMap(r => r.scorers).filter(s => s.playerId === player.id);
   const playerCards = results.flatMap(r => [...r.yellowCards, ...r.redCards]).filter(c => c.playerName === player.name);
-  const motmMatches = results.filter(r => r.motm?.playerId === player.id);
+  const motmMatches = results.filter(r =>
+    r.motm && (r.motm.playerId === player.id || r.motm.playerName === player.name)
+  );
 
   return (
     <div className="page">
