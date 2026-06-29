@@ -20,6 +20,7 @@ export default function PlayerDetail() {
 
   const playerGoals = results.flatMap(r => r.scorers).filter(s => s.playerId === player.id);
   const playerCards = results.flatMap(r => [...r.yellowCards, ...r.redCards]).filter(c => c.playerName === player.name);
+  const motmMatches = results.filter(r => r.motm?.playerId === player.id);
 
   return (
     <div className="page">
@@ -109,6 +110,26 @@ export default function PlayerDetail() {
                     <div className="goal-minutes">
                       {goals.map((g, i) => <span key={i} className="goal-minute">⚽ {g.minute}'</span>)}
                     </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Man of the Match Awards */}
+        {motmMatches.length > 0 && (
+          <section className="player-stats-section">
+            <h2>⭐ Man of the Match Awards ({motmMatches.length})</h2>
+            <div className="match-history">
+              {motmMatches.sort((a, b) => new Date(b.date) - new Date(a.date)).map(r => {
+                const home = getTeamById(r.homeTeamId);
+                const away = getTeamById(r.awayTeamId);
+                return (
+                  <div key={r.id} className="match-history-row">
+                    <span style={{ color: 'var(--accent)', fontWeight: 700 }}>⭐</span>
+                    <span className="match-history-date">{new Date(r.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' })}</span>
+                    <span className="match-history-fixture">{home?.shortName} {r.homeScore}–{r.awayScore} {away?.shortName}</span>
                   </div>
                 );
               })}
