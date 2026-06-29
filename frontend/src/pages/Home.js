@@ -33,6 +33,7 @@ export default function Home() {
 
   const totalGoals = results.reduce((sum, r) => sum + r.homeScore + r.awayScore, 0);
   const totalMatches = results.length;
+  const matchdaysDone = new Set(results.map(r => r.matchday)).size;
 
   return (
     <div className="page home-page">
@@ -70,7 +71,7 @@ export default function Home() {
             <span className="stat-pill-label">Goals / Match</span>
           </div>
           <div className="stat-pill">
-            <span className="stat-pill-value">{leagueInfo.currentMatchday - 1}</span>
+            <span className="stat-pill-value">{matchdaysDone}</span>
             <span className="stat-pill-label">Matchdays Done</span>
           </div>
         </div>

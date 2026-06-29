@@ -15,7 +15,8 @@ export default function Statistics() {
     const counts = {};
     results.forEach(r => {
       if (r.motm) {
-        const key = r.motm.playerId;
+        const key = r.motm.playerId ?? r.motm.playerName;
+        if (!key) return;
         counts[key] = counts[key] || { ...r.motm, team: getTeamById(r.motm.teamId), count: 0 };
         counts[key].count++;
       }
