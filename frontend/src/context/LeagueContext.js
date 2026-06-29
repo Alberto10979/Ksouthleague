@@ -174,7 +174,7 @@ export function LeagueProvider({ children }) {
 
   const getDisciplinary = () =>
     [...players].filter(p => p.yellowCards > 0 || p.redCards > 0)
-      .sort((a, b) => (b.redCards * 3 + b.yellowCards) - (a.redCards * 3 + a.yellowCards)).slice(0, 20);
+      .sort((a, b) => (a.redCards * 3 + a.yellowCards) - (b.redCards * 3 + b.yellowCards)).slice(0, 20);
 
   const getResultsByTeam = (teamId) =>
     results.filter(r => r.homeTeamId === Number(teamId) || r.awayTeamId === Number(teamId));
